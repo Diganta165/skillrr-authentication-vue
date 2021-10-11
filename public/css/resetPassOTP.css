@@ -1,0 +1,30 @@
+
+.skiller_reset_info p a{
+    color: var(--color1);
+    font-weight: 500;
+}
+
+.resetOTP_box {
+    max-width: 205px;
+    width: 100%;
+    height: 40px;
+    margin: 0 auto;
+}
+.otp_box {
+    width: 40px;
+    height: 100%;
+    background: transparent;
+    border: 1px solid #efefef;
+    box-shadow: 1px 1px 2px rgb(239 239 239 / 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--color1);
+}
+.skiller_request_new_code p a{
+    font-size: 14px;
+    line-height: 28px;
+    font-weight: 500;
+    color:var(--color2)
+}

@@ -1,0 +1,16 @@
+
+
+.check_policy input[type="checkbox"]:checked{
+    background:var(--color2);
+    color: #fff;
+}
+.check_policy span,
+.check_policy span a{
+    font-size: 14px;
+    line-height: 24px;
+    color: #1E272E;
+    font-family: 'Poppins', sans-serif;
+}
+.check_policy span a{
+   font-weight: 700;
+}
