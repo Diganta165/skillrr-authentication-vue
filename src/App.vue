@@ -7,7 +7,7 @@
     <reset-pass-component></reset-pass-component> 
     <reset-otp></reset-otp> -->
     <div id="nav">
-      <router-link to='/signIn'></router-link>
+      <router-link to='/logIn'></router-link>
     <router-link to="/signUp"></router-link>
     <router-link to="/resetPass"></router-link>
     <router-link to="/resetPassOTP"></router-link>

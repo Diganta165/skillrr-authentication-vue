@@ -6,7 +6,7 @@ import ResetPassOTPComponent from '../components/ResetPassword/ResetPassOTPCompo
 import DashBoardComponent from '../components/DashBoard/DashBoardComponent'
 
 export  const routes =[
-    {path:'/signIn', component:SignInComponent},
+    {path:'/logIn', component:SignInComponent},
     {path: '/signUp', component: SignUpComponent},
     {path: '/resetPass', component: ResetPassComponent},
     {path: '/resetPassOTP', component: ResetPassOTPComponent},
