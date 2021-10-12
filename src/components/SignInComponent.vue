@@ -93,7 +93,7 @@ export default {
       email: "",
       password: "",
       type: "password",
-      btnText: "Show Password",
+      // btnText: "Show Password",
       //   info: null,
       error: "",
       //   validEmail: false,

@@ -33,7 +33,10 @@
         </div>
         <div class="skiller_form_wrapper">
           <div class="skiller_form_title txt_center pb30">
-            <p>Sign In</p>
+            <p>Sign Up</p>
+            <ul>
+              <li v-for="(err,id) in errors" :key="id">{{err[0]}}</li>
+            </ul>
           </div>
           <form
             action=""
@@ -41,43 +44,72 @@
             @submit.prevent="handleRegester()"
           >
             <label class="skiller_type_first_name mb20">
-              <input type="text" placeholder="First Name" v-model="registrationData.first_name" />
+              <input
+                type="text"
+                placeholder="First Name"
+                v-model="registrationData.frist_name"
+              />
             </label>
             <label class="skiller_type_last_name mb20">
-              <input type="text" placeholder="Last Name" v-model="registrationData.last_name" />
+              <input
+                type="text"
+                placeholder="Last Name"
+                v-model="registrationData.last_name"
+              />
+            </label>
+            <label class="skiller_type_last_name mb20">
+              <input
+                type="text"
+                placeholder="User Name"
+                v-model="registrationData.user_name"
+              />
             </label>
             <label class="skiller_type_phone mb20">
-              <input type="text" placeholder="Phone" v-model="registrationData.mobile_no" />
+              <input
+                type="text"
+                placeholder="Phone"
+                v-model="registrationData.mobile_no"
+              />
             </label>
             <label class="skiller_type_mail mb20">
-              <input type="text" placeholder="Email" v-model="registrationData.email" />
+              <input
+                type="text"
+                placeholder="Email"
+                v-model="registrationData.email"
+                required
+                @blur="validateEmail"
+                @focus="clearEmailError"
+              />
             </label>
+            <p v-if="registrationData.validEmail" style="color: red">
+              {{ registrationData.emailError }}
+            </p>
 
             <label class="skiller_select_country mb20">
-              <input type="text" placeholder="Country" />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="11.685"
-                height="7"
-                viewBox="0 0 11.685 7"
-              >
-                <path
-                  id="Arrow"
-                  d="M15.25,9.088,10.77,5.251a1.1,1.1,0,0,0-1.346.03.753.753,0,0,0-.032,1.153l4.477,3.837a.755.755,0,0,1,0,1.183L9.393,15.291a.755.755,0,0,0,0,1.184,1.1,1.1,0,0,0,1.381,0l4.476-3.837A2.265,2.265,0,0,0,15.25,9.088Z"
-                  transform="translate(16.72 -9.107) rotate(90)"
-                  fill="#1e272e"
-                  opacity="0.5"
-                />
-              </svg>
+              <select class="skillerr_dropdown">
+                <option
+                  v-for="country in countryList"
+                  :key="country.id"
+                  value="country.id"
+                  
+                >
+                  {{ country.name }}
+                </option>
+              </select>
             </label>
 
             <label class="skiller_type_pass mb10">
-              <input type="password" placeholder="Password" />
+              <input
+                :type="registrationData.passwordType"
+                placeholder="Password"
+                v-model="registrationData.password"
+              />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="12.457"
                 viewBox="0 0 16 12.457"
+                @click="showPassword"
               >
                 <path
                   id="Eye"
@@ -87,20 +119,54 @@
                 />
               </svg>
             </label>
+            <label class="skiller_type_pass mb10">
+              <input
+                :type="registrationData.confirmPasswordType"
+                placeholder="Confirm Password"
+                v-model="registrationData.confirm_password"
+                @blur="checkPass"
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="12.457"
+                viewBox="0 0 16 12.457"
+                @click="showConfirmPassword"
+              >
+                <path
+                  id="Eye"
+                  d="M-4114.515-444.4a3.273,3.273,0,0,1,0-3.44,8.824,8.824,0,0,1,7.511-4.508,8.825,8.825,0,0,1,7.512,4.508,3.275,3.275,0,0,1,0,3.44,8.824,8.824,0,0,1-7.512,4.509A8.823,8.823,0,0,1-4114.515-444.4Zm1.136-2.742a1.943,1.943,0,0,0,0,2.045,7.539,7.539,0,0,0,6.375,3.872,7.537,7.537,0,0,0,6.374-3.872,1.941,1.941,0,0,0,0-2.045,7.531,7.531,0,0,0-6.374-3.872A7.539,7.539,0,0,0-4113.379-447.139Zm3.042,1.022a3.333,3.333,0,0,1,3.333-3.332,3.337,3.337,0,0,1,3.333,3.332,3.333,3.333,0,0,1-3.333,3.333A3.333,3.333,0,0,1-4110.336-446.117Zm1.333,0a2,2,0,0,0,2,2,2,2,0,0,0,2-2,2,2,0,0,0-2-2A2,2,0,0,0-4109-446.117Z"
+                  transform="translate(4115.004 452.345)"
+                  fill="#1e272e"
+                />
+              </svg>
+            </label>
+            <p v-if="registrationData.notMatched" style="color: red">
+              {{ registrationData.passwordError }}
+            </p>
             <div class="check_policy pb20">
-              <input type="checkbox" /><span>
+              <input
+                type="checkbox"
+                value="123"
+                v-model="registrationData.acceptAgrement"
+              />
+              <span>{{registrationData.errors.checkAgreement}}
                 I agree to the skiller <a href="#"> User agreement </a> and
                 <a href="#">privacy policy</a>
+                <p
+                  v-if="registrationData.errors.checkAggrement"
+                  style="color: red"
+                >
+                  Please aggred with our terms and condition
+                </p>
               </span>
             </div>
-              <button class="sign_in_btn mb30"> Register</button>
-            
+            <button class="sign_in_btn mb30">Register</button>
           </form>
           <div class="skiller_sign_in_bottom pt20 txt_center">
             <p>
               Already have an account?
-              <a href="#"><router-link to="/signIn">Sign In</router-link> </a>
-            
+              <a href="#"><router-link to="/logIn">Sign In</router-link> </a>
             </p>
 
             <!-- <p>Already have an account? <a href="#"> Sign In</a> </p> -->
@@ -116,32 +182,156 @@ export default {
   data() {
     return {
       registrationData: {
-        frist_name: "SDFDSF",
-        last_name: "SFSDF",
-        mobile_no: "324343434",
-        email: "dsfsdf@GMAIL.COM",
-        password: "sdfsdfdf",
-        confirm_password:"sdfsdfdf",
-        user_name:'dfdsf'
-        // events: [],
+        frist_name: "",
+        last_name: "",
+        mobile_no: "",
+        email: "",
+        password: "",
+        confirm_password: "",
+        passwordType: "password",
+        confirmPasswordType: "password",
+        user_name: "",
+        notMatched: false,
+        passwordError: "",
+        emailError: "",
+        validEmail: false,
+        acceptAgrement:"",
+        errors: {
+          checkAggrement: false,
+        },
       },
+      countryList: [],
+      errors:[]
     };
   },
   methods: {
-    handleRegester() {
-console.log(this.registrationData)
-
-      this.axios
-    .post("http://192.168.0.132:8080/api/register/",this.registrationData)
-        .then((res) => console.log(res))
-        // .then((res) => (this.events = res.data))
-        .catch((err) => {
-          console.log(err.response);
-        });
+    // Email Validation
+    validateEmail() {
+      if (this.registrationData.email.length != 0) {
+        if (
+          //eslint-disable-next-line
+          !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+            this.registrationData.email
+          )
+        ) {
+          this.registrationData.emailError = "Please Enter a Valid Email";
+          this.registrationData.validEmail = true;
+        } else {
+          this.registrationData.emailError = "";
+        }
+      }
     },
+
+    // Clear Email Error
+    clearEmailError() {
+      this.registrationData.emailError = "";
+    },
+
+    // Password Validation
+    checkPass() {
+      // console.log("I am blur");
+      if (
+        (this.registrationData.password !==
+        this.registrationData.confirm_password) 
+        // && (this.registrationData.confirm_password.length == 0)
+      ) {
+        // console.log("password didn't match");
+
+        this.registrationData.passwordError = "Not Matched";
+        // console.log(
+        //   "Should be not matched",
+        //   this.registrationData.passwordError
+        // );
+
+        this.registrationData.notMatched = true;
+        // console.log(this.registrationData.notMatched);
+      } else {
+        // console.log("this is else");
+        this.registrationData.passwordError = "";
+        // console.log(this.registrationData.passwordError);
+      }
+    },
+
+    // Show Password
+    showPassword() {
+      if (this.registrationData.passwordType == "password") {
+        this.registrationData.passwordType = "text";
+      } else {
+        this.registrationData.passwordType = "password";
+      }
+    },
+
+    // Show Confirm Password
+    showConfirmPassword() {
+      if (this.registrationData.confirmPasswordType == "password") {
+        this.registrationData.confirmPasswordType = "text";
+      } else {
+        this.registrationData.confirmPasswordType = "password";
+      }
+    },
+
+    // Register Form
+    handleRegester() {
+      
+console.log(this.registrationData.acceptAgrement)
+      if (this.registrationData.acceptAgrement) {
+        this.registrationData.errors.checkAggrement = false;
+        if (
+          this.registrationData.password !==
+          this.registrationData.confirm_password 
+          // && this.registrationData.confirm_password.length <1
+        ) {
+          console.log("password didn't match submit");
+          this.registrationData.passwordError ="Password didn't match";
+          this.registrationData.notMatched = true;
+
+          // this.registrationData.notMatched = !this.registrationData.notMatched;
+        } else {
+          this.axios
+            .post(
+              "http://192.168.0.132:8080/api/register/",
+              this.registrationData
+            )
+            // .then((res) => console.log(res.data.data.token))
+            .then((res) => {
+              localStorage.setItem("access_token",res.data.data.token)
+              this.$router.push('/dashboard')
+            })
+
+            .catch((err) => {
+               
+              console.log(err.response.data.errors);
+              this.errors = err.response.data.errors;
+            });
+        }
+      } else {
+        this.registrationData.errors.checkAggrement = true;
+      }
+    },
+  },
+  // load countries in dropdown list
+
+  async mounted() {
+    try {
+      const countryData = await this.axios.get(
+        "http://192.168.0.132:8080/api/v1/country"
+      );
+
+      // console.log(countryData.data.data);
+
+      this.countryList = countryData.data.data;
+      
+    } catch (err) {
+      console.log(err.response);
+    }
   },
 };
 </script>
 
 <style>
+.skillerr_dropdown {
+  height: 40px;
+  width: 360px;
+  border: 1px solid silver;
+}
 </style>
