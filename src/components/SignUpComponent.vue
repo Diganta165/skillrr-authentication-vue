@@ -221,10 +221,11 @@ export default {
     // Email Validation
     validateEmail() {
       if (this.registrationData.email.length != 0) {
+        this.registrationData.email = this.registrationData.email.trim();
         if (
           //eslint-disable-next-line
           !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-            this.registrationData.email
+           this.registrationData.email
           )
         ) {
           this.registrationData.emailError = "Please Enter a Valid Email";
