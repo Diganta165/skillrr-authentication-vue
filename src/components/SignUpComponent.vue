@@ -34,9 +34,9 @@
         <div class="skiller_form_wrapper">
           <div class="skiller_form_title txt_center pb30">
             <p>Sign Up</p>
-            <ul>
-              <li v-for="(err,id) in errors" :key="id">{{err[0]}}</li>
-            </ul>
+            <!-- <ul>
+              <li v-for="(err,id) in errors" :key="id" style="color:red">{{err[0]}}</li>
+            </ul> -->
           </div>
           <form
             action=""
@@ -49,6 +49,10 @@
                 placeholder="First Name"
                 v-model="registrationData.frist_name"
               />
+
+              <span v-if="errors.frist_name" style="color: red">
+                {{ errors.frist_name[0] }}</span
+              >
             </label>
             <label class="skiller_type_last_name mb20">
               <input
@@ -56,6 +60,9 @@
                 placeholder="Last Name"
                 v-model="registrationData.last_name"
               />
+              <span v-if="errors.last_name" style="color: red">{{
+                errors.last_name[0]
+              }}</span>
             </label>
             <label class="skiller_type_last_name mb20">
               <input
@@ -63,6 +70,9 @@
                 placeholder="User Name"
                 v-model="registrationData.user_name"
               />
+              <span v-if="errors.user_name" style="color: red">{{
+                errors.user_name[0]
+              }}</span>
             </label>
             <label class="skiller_type_phone mb20">
               <input
@@ -70,6 +80,9 @@
                 placeholder="Phone"
                 v-model="registrationData.mobile_no"
               />
+              <span v-if="errors.mobile_no" style="color: red">{{
+                errors.mobile_no[0]
+              }}</span>
             </label>
             <label class="skiller_type_mail mb20">
               <input
@@ -91,7 +104,6 @@
                   v-for="country in countryList"
                   :key="country.id"
                   value="country.id"
-                  
                 >
                   {{ country.name }}
                 </option>
@@ -150,8 +162,9 @@
                 value="123"
                 v-model="registrationData.acceptAgrement"
               />
-              <span>{{registrationData.errors.checkAgreement}}
-                I agree to the skiller <a href="#"> User agreement </a> and
+              <span
+                >{{ registrationData.errors.checkAgreement }} I agree to the
+                skiller <a href="#"> User agreement </a> and
                 <a href="#">privacy policy</a>
                 <p
                   v-if="registrationData.errors.checkAggrement"
@@ -195,13 +208,13 @@ export default {
         passwordError: "",
         emailError: "",
         validEmail: false,
-        acceptAgrement:"",
+        acceptAgrement: "",
         errors: {
           checkAggrement: false,
         },
       },
       countryList: [],
-      errors:[]
+      errors: [],
     };
   },
   methods: {
@@ -231,8 +244,8 @@ export default {
     checkPass() {
       // console.log("I am blur");
       if (
-        (this.registrationData.password !==
-        this.registrationData.confirm_password) 
+        this.registrationData.password !==
+        this.registrationData.confirm_password
         // && (this.registrationData.confirm_password.length == 0)
       ) {
         // console.log("password didn't match");
@@ -272,37 +285,43 @@ export default {
 
     // Register Form
     handleRegester() {
-      
-console.log(this.registrationData.acceptAgrement)
+      console.log(this.registrationData.acceptAgrement);
       if (this.registrationData.acceptAgrement) {
         this.registrationData.errors.checkAggrement = false;
         if (
-          this.registrationData.password !==
-          this.registrationData.confirm_password 
-          // && this.registrationData.confirm_password.length <1
+          this.registrationData.password.length > 0 &&
+          this.registrationData.confirm_password.length > 0
         ) {
-          console.log("password didn't match submit");
-          this.registrationData.passwordError ="Password didn't match";
-          this.registrationData.notMatched = true;
+          if (
+            this.registrationData.password !==
+            this.registrationData.confirm_password
+            // && this.registrationData.confirm_password.length <1
+          ) {
+            console.log("password didn't match submit");
+            this.registrationData.passwordError = "Password didn't match";
+            this.registrationData.notMatched = true;
 
-          // this.registrationData.notMatched = !this.registrationData.notMatched;
+            // this.registrationData.notMatched = !this.registrationData.notMatched;
+          } else {
+            this.axios
+              .post(
+                "http://192.168.0.132:8080/api/register/",
+                this.registrationData
+              )
+              // .then((res) => console.log(res.data.data.token))
+              .then((res) => {
+                localStorage.setItem("access_token", res.data.data.token);
+                this.$router.push("/dashboard");
+              })
+
+              .catch((err) => {
+                console.log(err.response.data.errors);
+                this.errors = err.response.data.errors;
+              });
+          }
         } else {
-          this.axios
-            .post(
-              "http://192.168.0.132:8080/api/register/",
-              this.registrationData
-            )
-            // .then((res) => console.log(res.data.data.token))
-            .then((res) => {
-              localStorage.setItem("access_token",res.data.data.token)
-              this.$router.push('/dashboard')
-            })
-
-            .catch((err) => {
-               
-              console.log(err.response.data.errors);
-              this.errors = err.response.data.errors;
-            });
+          this.registrationData.passwordError = "Password didn't match";
+          this.registrationData.notMatched = true;
         }
       } else {
         this.registrationData.errors.checkAggrement = true;
@@ -320,7 +339,6 @@ console.log(this.registrationData.acceptAgrement)
       // console.log(countryData.data.data);
 
       this.countryList = countryData.data.data;
-      
     } catch (err) {
       console.log(err.response);
     }
