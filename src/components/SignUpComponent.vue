@@ -34,14 +34,12 @@
         <div class="skiller_form_wrapper">
           <div class="skiller_form_title txt_center pb30">
             <p>Sign Up</p>
-            <!-- <ul>
-              <li v-for="(err,id) in errors" :key="id" style="color:red">{{err[0]}}</li>
-            </ul> -->
+            
           </div>
           <form
             action=""
             class="skiller_form"
-            @submit.prevent="handleRegester()"
+            @submit.prevent="registerHandler()"
           >
             <label class="skiller_type_first_name mb20">
               <input
@@ -181,8 +179,6 @@
               Already have an account?
               <a href="#"><router-link to="/logIn">Sign In</router-link> </a>
             </p>
-
-            <!-- <p>Already have an account? <a href="#"> Sign In</a> </p> -->
           </div>
         </div>
       </div>
@@ -241,28 +237,17 @@ export default {
       this.registrationData.emailError = "";
     },
 
-    // Password Validation
+    // Password Validation on blur
     checkPass() {
-      // console.log("I am blur");
       if (
         this.registrationData.password !==
         this.registrationData.confirm_password
-        // && (this.registrationData.confirm_password.length == 0)
       ) {
-        // console.log("password didn't match");
-
         this.registrationData.passwordError = "Not Matched";
-        // console.log(
-        //   "Should be not matched",
-        //   this.registrationData.passwordError
-        // );
-
         this.registrationData.notMatched = true;
-        // console.log(this.registrationData.notMatched);
+        
       } else {
-        // console.log("this is else");
         this.registrationData.passwordError = "";
-        // console.log(this.registrationData.passwordError);
       }
     },
 
@@ -285,7 +270,7 @@ export default {
     },
 
     // Register Form
-    handleRegester() {
+    registerHandler() {
       console.log(this.registrationData.acceptAgrement);
       if (this.registrationData.acceptAgrement) {
         this.registrationData.errors.checkAggrement = false;
@@ -296,20 +281,17 @@ export default {
           if (
             this.registrationData.password !==
             this.registrationData.confirm_password
-            // && this.registrationData.confirm_password.length <1
+
           ) {
             console.log("password didn't match submit");
             this.registrationData.passwordError = "Password didn't match";
             this.registrationData.notMatched = true;
-
-            // this.registrationData.notMatched = !this.registrationData.notMatched;
           } else {
             this.axios
               .post(
                 "http://192.168.0.132:8080/api/register/",
                 this.registrationData
               )
-              // .then((res) => console.log(res.data.data.token))
               .then((res) => {
                 localStorage.setItem("access_token", res.data.data.token);
                 this.$router.push("/dashboard");
@@ -329,16 +311,14 @@ export default {
       }
     },
   },
-  // load countries in dropdown list
 
+
+  // load countries in dropdown list
   async mounted() {
     try {
       const countryData = await this.axios.get(
         "http://192.168.0.132:8080/api/v1/country"
       );
-
-      // console.log(countryData.data.data);
-
       this.countryList = countryData.data.data;
     } catch (err) {
       console.log(err.response);

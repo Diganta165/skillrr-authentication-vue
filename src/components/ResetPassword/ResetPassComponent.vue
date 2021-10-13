@@ -25,13 +25,13 @@
                    <label class="skiller_type_mail mb20">
                        <input type="text" placeholder="Email">
                    </label>
-                   <a  href="#" ><router-link to="/resetPassOTP" class="sign_in_btn mb30">Sign In</router-link>
+                   <router-link to="/resetPassOTP" class="sign_in_btn mb30">Sign In</router-link>
                    
                        
-                   </a>
+                  
                 </form>
                 <div class="skiller_sign_in_bottom pt20 txt_center" >
-                    <p>Sign in instead? <router-link to='/signIn'>Sign In</router-link> </p>
+                    <p>Sign in instead? <router-link to='/logIn'>Sign In</router-link> </p>
                     
                 </div>
             </div>

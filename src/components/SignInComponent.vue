@@ -47,7 +47,7 @@
             </label>
             <label class="skiller_type_pass mb10">
               <input :type="type" placeholder="Password" v-model="password" />
-              <!-- <input :type="type" placeholder="Password" v-model="password"  /> -->
+
               <p v-if="hasPassword">
                 <span style="color: red">Invalid Password <br /><br /></span>
               </p>
@@ -93,10 +93,7 @@ export default {
       email: "",
       password: "",
       type: "password",
-      // btnText: "Show Password",
-      //   info: null,
       error: "",
-      //   validEmail: false,
       hasEmail: false,
       hasPassword: false,
       msg: "",
@@ -108,8 +105,6 @@ export default {
       this.msg = "";
     },
     validateEmail() {
-      //   console.log(this.email.length);
-
       if (!this.email.length == 0) {
         //eslint-disable-next-line
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)) {
@@ -137,7 +132,6 @@ export default {
             localStorage.setItem("access_token", res.data.data.token);
             this.$router.push("/dashboard");
           })
-          // .then(res=> console.log(res.data.data.token))
           .catch((err) => {
             console.log(err.response.data.errors.error);
             this.error = err.response.data.errors.error;

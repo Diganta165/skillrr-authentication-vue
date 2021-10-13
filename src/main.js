@@ -4,8 +4,14 @@ import VueRouter from 'vue-router'
 import {routes}  from './Router/routes'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueSweetalert2 from 'vue-sweetalert2'
+
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
+Vue.use(VueSweetalert2)
 
 Vue.config.productionTip = false
 
