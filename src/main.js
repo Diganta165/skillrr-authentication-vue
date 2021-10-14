@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios'
 import VueSweetalert2 from 'vue-sweetalert2'
 
 import 'sweetalert2/dist/sweetalert2.min.css';
+import store from './store'
 
 
 Vue.use(VueAxios, axios)
@@ -24,5 +25,6 @@ mode:'history'
 
 new Vue({
   router,
-  render: h => h(App),
+  store,
+  render: h => h(App)
 }).$mount('#app')

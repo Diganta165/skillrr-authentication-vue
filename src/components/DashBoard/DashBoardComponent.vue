@@ -9,6 +9,7 @@
           <th>Status</th>
           <th>Action</th>
         </tr>
+        <tr>
         <tr v-for="country in loadCountry" :key="country.id">
           <td></td>
           <td>{{ country.name }}</td>
@@ -44,7 +45,7 @@
 export default {
   data() {
     return {
-      loadCountry: {},
+      // loadCountry: {},
       loadLinks: [],
       serial: 1,
       pageNo: 1,
@@ -54,6 +55,12 @@ export default {
   },
 
   methods: {
+
+    loadCountryData(){
+
+       this.$store.commit('country/loadAllCountryLists');
+
+    },
     // LogOut
     handleLogOut() {
       localStorage.setItem("access_token", "");
@@ -65,7 +72,7 @@ export default {
         const countryData = await this.axios.get(
           `http://192.168.0.132:8080/api/v1/country?page=${pageNumber}`
         );
-        this.loadCountry = countryData.data.data;
+        // this.loadCountry = countryData.data.data;
         this.loadLinks = countryData.data.links;
         this.meta = countryData.data.meta;
         console.log("Load Country Data", this.loadCountry);
@@ -123,22 +130,38 @@ export default {
         .then((result) => {
           console.log(result);
           if (result.isConfirmed) {
-            let header = {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            };
-            let response = this.axios.delete(
-              `http://192.168.0.132:8080/api/admin/delete/country/${countryId}`,
-              { headers: header }
-            );
-            this.$swal.fire(
-              "Deleted!",
-              "Your file has been deleted.",
-              "success"
-            );
+            // let header = {
+            //   Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            // };
+            // let response = this.axios.delete(
+            //   `http://192.168.0.132:8080/api/admin/delete/country/${countryId}`,
+            //   { headers: header }
+            // );
+            let response = this.$store.dispatch("country/dashboardDataDelete", {
+              countryId
+            });
+
+
+            this.$store.dispatch('country/getAllCountryList');
+
+            console.log("response after result is confirmed", response);
+            console.log(this.$store.state.countryLists)
+            // dashboardDataDelete();
+            let isItDeleted = this.$store.state.isDeleted;
+            //  this.loadCountry = this.$store.state.countryLists
+            if (isItDeleted) {
+              
+              this.$swal.fire(
+                "Deleted!",
+                "Your file has been deleted.",
+                "success"
+              );
+              this.changeData();
+            }
 
             response.then((result) => {
               console.log(result);
-              this.changeData();
+              
             });
           }
         });
@@ -146,25 +169,35 @@ export default {
     },
   },
   created() {
+
+    this.loadCountryData();
     console.log("hi created");
     const token = localStorage.getItem("access_token");
+
+    console.log(token);
 
     if (!token) {
       this.$router.push("/logIn");
     }
 
-    const countryData = this.axios.get(
-      "http://192.168.0.132:8080/api/v1/country?page=1"
-    );
-    countryData.then((countryData) => {
-      this.loadCountry = countryData.data.data;
-      this.loadLinks = countryData.data.links;
-      this.meta = countryData.data.meta;
-      console.log("Load Country Data", this.loadCountry);
-      console.log("Load Link Data", this.loadLinks);
-      console.log("Load Meta Data", countryData.data.meta);
-    });
+    // const countryData = this.axios.get(
+    //   "http://192.168.0.132:8080/api/v1/country?page=1"
+    // );
+    // countryData.then((countryData) => {
+    //   this.loadCountry = countryData.data.data;
+    //   this.loadLinks = countryData.data.links;
+    //   this.meta = countryData.data.meta;
+    //   console.log("Load Country Data", this.loadCountry);
+    //   console.log("Load Link Data", this.loadLinks);
+    //   console.log("Load Meta Data", countryData.data.meta);
+    // });
   },
+
+  computed:{
+    loadCountry(){
+      return this.$store.state.country.countryLists;
+    }
+  }
 };
 </script>
 

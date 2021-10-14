@@ -27,6 +27,8 @@
         <div class="skiller_form_wrapper">
           <div class="skiller_form_title txt_center pb30">
             <p>Sign In</p>
+            {{ totolBookInState }}
+            <!-- {{getBookLists}} -- Totla Book {{totalBook}} -->
           </div>
           <form action="" @submit.prevent="handleInput()" class="skiller_form">
             <label class="skiller_type_mail mb20">
@@ -70,7 +72,7 @@
             <p id="forgot_pass" class="mb20">
               <router-link to="/resetPass">Forgot Password?</router-link>
             </p>
-            <p style="color: red">{{ error }}</p>
+            <p style="color: red">{{ loginErrors }}</p>
 
             <button class="sign_in_btn mb30">Sign In</button>
           </form>
@@ -94,9 +96,11 @@ export default {
       password: "",
       type: "password",
       error: "",
+      loginError:'',
       hasEmail: false,
       hasPassword: false,
       msg: "",
+      totalBook: this.$store.state.bookList,
     };
   },
 
@@ -114,6 +118,17 @@ export default {
         }
       }
     },
+    hasUserLoggedIn() {
+      let loggedData = this.$store.state.login.userData;
+  // console.log(loggedData="user Data");
+      if (loggedData.length > 0) {
+        localStorage.setItem("access_token", loggedData);
+        this.$router.push("/dashboard");
+      } else {
+        // console.log(this.$store.state.loginError)
+        this.error = this.$store.state.login.loginError;
+      }
+    },
     handleInput() {
       if (!this.email) {
         this.hasEmail = true;
@@ -123,19 +138,11 @@ export default {
       }
 
       if (this.email && this.password && !this.msg) {
-        this.axios
-          .post("http://192.168.0.132:8080/api/login/", {
-            email: this.email,
-            password: this.password,
-          })
-          .then((res) => {
-            localStorage.setItem("access_token", res.data.data.token);
-            this.$router.push("/dashboard");
-          })
-          .catch((err) => {
-            console.log(err.response.data.errors.error);
-            this.error = err.response.data.errors.error;
-          });
+        //login statement herere
+
+        this.$store.dispatch("login/userLogin", {email: this.email, password: this.password});
+
+      return  this.hasUserLoggedIn();
       }
     },
     showPassword() {
@@ -145,6 +152,19 @@ export default {
         this.type = "password";
       }
     },
+  },
+
+  computed: {
+    getBookLists() {
+      return this.$store.state.bookList;
+    },
+    totolBookInState() {
+      return this.$store.getters.bookCounter;
+    },
+    loginErrors(){
+      return this.$store.state.loginError;
+
+    }
   },
 };
 </script>

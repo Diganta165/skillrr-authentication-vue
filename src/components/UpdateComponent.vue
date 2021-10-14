@@ -80,31 +80,16 @@ export default {
         })
         .catch((err) => console.log(err.response));
     },
+
+    async test() {
+    let   name = await this.$store.state.country
+       console.log(name)
+    },
   },
 
-  async mounted() {
-    const parameterId = this.$route.params.id;
-    console.log("This is Id parameter", parameterId);
-
-    // this.axios.post(``)
-
-    try {
-      let authorizedToken = {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      };
-
-      const countryData = await this.axios.get(
-        // `http://192.168.0.132:8080/api/v1/country/${parameterId}`,{headers:authorizedToken}
-        `http://192.168.0.132:8080/api/admin/country/${parameterId}`,
-        { headers: authorizedToken }
-      );
-      console.log("This is Country Data", countryData);
-      this.countryName = countryData.data.data[0].name;
-      this.countryStatus = countryData.data.data[0].status.status;
-      this.countryStatusCode = countryData.data.data[0].status.status_code;
-    } catch (err) {
-      console.log(err.response);
-    }
+  mounted() {
+    this.$store.dispatch("update/updateCountryInfo", this.$route.params.id);
+  return  this.test();
   },
 };
 </script>

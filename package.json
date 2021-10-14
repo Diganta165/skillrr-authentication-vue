@@ -14,11 +14,13 @@
     "vue-axios": "^3.3.7",
     "vue-router": "^3.5.2",
     "vue-sweetalert2": "^5.0.2",
-    "vuejs-validators": "^1.1.8"
+    "vuejs-validators": "^1.1.8",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-vuex": "^4.5.13",
     "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",

@@ -34,6 +34,7 @@
         <div class="skiller_form_wrapper">
           <div class="skiller_form_title txt_center pb30">
             <p>Sign Up</p>
+            {{getBookLists}}
             
           </div>
           <form
@@ -310,6 +311,11 @@ export default {
         this.registrationData.errors.checkAggrement = true;
       }
     },
+  },
+  computed:{
+      getBookLists(){
+        return this.$store.state.bookList;
+      }
   },
 
 
