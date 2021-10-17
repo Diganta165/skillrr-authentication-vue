@@ -84,6 +84,7 @@ export default {
     // Update Data
     updateData(countryId) {
       this.$router.push(`/update/${countryId}`);
+      this.loadCountryData();
       // this.axios.post('http://192.168.0.132:8080/api/v1/country')
       // console.log("updateData CountryID", countryId);
       // let authorizeToken = {
@@ -145,6 +146,9 @@ export default {
             this.$store.dispatch('country/getAllCountryList');
 
             console.log("response after result is confirmed", response);
+            let promiseResolve =Promise.resolve(response);
+            console.log('This is promise resolve',promiseResolve)
+
             console.log(this.$store.state.countryLists)
             // dashboardDataDelete();
             let isItDeleted = this.$store.state.isDeleted;
@@ -168,7 +172,7 @@ export default {
       // this.axios.post('http://192.168.0.132:8080/api/v1/country',{countryId})
     },
   },
-  created() {
+  mounted() {
 
     this.loadCountryData();
     console.log("hi created");
