@@ -14,6 +14,12 @@ export const country = {
                 return data < 4
             })
 
+        },
+        countryList(state){
+            return state.countryLists;
+        },
+        countryDeleted(state){
+            return state.isDeleted;
         }
     },
     mutations: {

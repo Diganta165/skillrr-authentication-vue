@@ -149,9 +149,11 @@ export default {
             let promiseResolve =Promise.resolve(response);
             console.log('This is promise resolve',promiseResolve)
 
-            console.log(this.$store.state.countryLists)
+            // console.log(this.$store.state.countryLists)
             // dashboardDataDelete();
-            let isItDeleted = this.$store.state.isDeleted;
+            // let isItDeleted = this.$store.state.isDeleted;
+            let isItDeleted = this.deletedCountry()
+            console.log('Is It deleted',isItDeleted)
             //  this.loadCountry = this.$store.state.countryLists
             if (isItDeleted) {
               
@@ -172,6 +174,7 @@ export default {
       // this.axios.post('http://192.168.0.132:8080/api/v1/country',{countryId})
     },
   },
+ 
   mounted() {
 
     this.loadCountryData();
@@ -200,6 +203,12 @@ export default {
   computed:{
     loadCountry(){
       return this.$store.state.country.countryLists;
+    },
+    deletedCountry(){
+      return this.$store.getters['country/countryDeleted']
+    },
+    allCountryInfo(){
+      return this.$store.getters['country/countryList']
     }
   }
 };
